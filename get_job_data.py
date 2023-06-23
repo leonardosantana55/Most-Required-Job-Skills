@@ -7,7 +7,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
-def get_jobs_links(q):
+def get_job_data(q):
 
     #faz a primeira pesquisa para captar o número de páginas resultantes da pesquisa
     response = requests.get(f'https://www.linkedin.com/jobs/search/?currentJobId=3640009990&f_TPR=r2592000&geoId=106057199&keywords={q}&location=Brasil&originalSubdomain=br', verify=False)
@@ -35,18 +35,15 @@ def get_jobs_links(q):
         for item in items:
             job_title = str(item.span.text).strip()
             s = SequenceMatcher(None, q, job_title)
-            if s.ratio() > 0.6:
+            if s.ratio() > 0.1:
                 links[job_title] = item.get('href')
             
-    return links 
-
     
 
 
 
-def get_dataframe(list_of_links):
     list_of_prequisites = {}
-    for link in list(list_of_links.values()):
+    for link in list(links.values()):
         response = requests.get(link, verify=False)
         soup = bs(response.text, 'html.parser')
         try:
@@ -93,4 +90,7 @@ def get_dataframe(list_of_links):
     df = pd.DataFrame(contagem_de_termos)
     df_result = df.sort_values(by=1, ascending=False).reset_index(drop=True).head(100)
 
-    return df_result
+    return df_result, links, list_of_prequisites
+
+if __name__ == '__main__':
+    get_job_data()

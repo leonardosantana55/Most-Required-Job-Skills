@@ -6,9 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Result</title>
 </head>
-<body>
+<body style="text-align: center;">
 
-<h1> Você pesquisou por {{q}}</h1>
-    
+<h1> Palavras mais mencionadas para: {{q}}</h1>
+
+<div style="display: inline-table;">
+{% for table in tables %}
+            {{titles[loop.index]}}
+            {{ table|safe }}
+{% endfor %}
+</div>
+
 </body>
 </html>
