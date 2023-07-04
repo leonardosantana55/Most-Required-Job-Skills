@@ -1,0 +1,3 @@
+dbname: linkedin_scrapping
+user: adminleo
+pw: fica

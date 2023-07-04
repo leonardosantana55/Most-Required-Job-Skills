@@ -25,6 +25,8 @@ def get_job_data(q):
     
     links = {}
     #acessa cada uma das páginas do resultado da pesquisa
+    #encontrei um problema ao utilizar o link atual. Utilizar este abaixo. provavelmente vai precisar de nova lógica para captar os links
+    #https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?f_TPR=r2592000&geoId=106057199&keywords=engenheiro%20de%20software&location=Brasil&originalSubdomain=br&start=75
     for key in start_key_list:
         response = requests.get(f'https://www.linkedin.com/jobs/search/?currentJobId=3640009990&f_TPR=r2592000&geoId=106057199&keywords={q}&location=Brasil&originalSubdomain=br&start={key}', verify=False)
         soup = bs(response.text, 'html.parser')
@@ -80,6 +82,7 @@ def get_job_data(q):
 
 
     contagem_de_termos = [[0,0]]
+    
     for value in unrepeated_list_of_prequisites.values():
         for word in value:
             if word not in stop_words:
@@ -90,7 +93,7 @@ def get_job_data(q):
     df = pd.DataFrame(contagem_de_termos)
     df_result = df.sort_values(by=1, ascending=False).reset_index(drop=True).head(100)
 
-    return df_result, links, list_of_prequisites
+    return df_result, links, list_of_prequisites, q
 
 if __name__ == '__main__':
     get_job_data()
